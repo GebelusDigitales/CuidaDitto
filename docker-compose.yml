@@ -1,5 +1,7 @@
 version: "3.8"
 services:
   eclipse-ditto:
-    image: maven:3.9.6-eclipse-temurin-17
     restart: unless-stopped
+    volumes: 
+      - .:/app
+    build: .
