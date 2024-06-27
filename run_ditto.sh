@@ -19,7 +19,7 @@ tell application "iTerm"
     tell current window
         create tab with default profile
         tell current session of current tab
-            write text "docker run -it --name mosquitto -p 1883:1883 -v $(pwd)/mosquitto:/mosquitto/ eclipse-mosquitto mosquitto -c ./mosquitto/config/mosquitto.conf"
+            write text "docker run -it --name mosquitto -p 1883:1883 -v $(pwd)/mosquitto:/mosquitto/ eclipse-mosquitto mosquitto -c /mosquitto/config/mosquitto.conf"
         end tell
     end tell
 end tell
@@ -65,11 +65,11 @@ curl -X PUT 'http://localhost:8080/api/2/policies/android:policy' -u 'ditto:ditt
 
 # Create the Thing in Ditto
 echo "Creating Thing in Ditto..."
-curl --location --request PUT -u ditto:ditto 'http://localhost:8080/api/2/things/android:mobile' \
+curl --location --request PUT -u ditto:ditto 'http://localhost:8080/api/2/things/:android:mobile' \
  --header 'Content-Type: application/json' \
  --data-raw '{
      "policyId": "android:policy",
-     "definition": "https://raw.githubusercontent.com/bernar0507/Eclipse-Ditto-MQTT-iWatch/main/iwatch/wot/iwatch.tm.jsonld"
+     "definition": "https://raw.githubusercontent.com/GebelusDigitales/CuidaDitto/main/android.jsonld"
  }'
 
 # Get the IP address of the Mosquitto container
@@ -94,7 +94,7 @@ curl -X POST \
            "connectionType": "mqtt",
            "connectionStatus": "open",
            "failoverEnabled": true,
-           "uri": "tcp://ditto:ditto@'"$mosquitto_ip"':1883",
+           "uri": "tcp://ditto:ditto@127.0.0.1:1883",
            "sources": [{
                "addresses": ["android:mobile/things/twin/commands/modify"],
                "authorizationContext": ["nginx:ditto"],
